@@ -16,8 +16,7 @@
             <input type="text" name="email" placeholder="enter email address">
             <input type="submit" name="reset-request-submit" value="Send reset link" class="form-btn">
             <p><a href="login_form.php">Go back to log in</a></p>
-        </form>
-        <?php
+            <?php
             if(isset($_GET["reset"])){
                 if ($_GET["reset"] == "success"){
                     echo '<span class="signupsuccess">Check your e-mail.</span>';
@@ -25,6 +24,8 @@
             }
         
         ?>
+        </form>
+       
     
     </div>
 </body>

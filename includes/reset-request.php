@@ -1,5 +1,8 @@
 <?php
 
+
+ @include 'config.php';
+
 if (isset($_POST["reset-request-submit"])) {
     
     $selector = bin2hex(random_bytes(8));
@@ -9,34 +12,48 @@ if (isset($_POST["reset-request-submit"])) {
 
     $expires = date("U") + 1800;
 
-    @include 'config.php';
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+    $conn = mysqli_connect('localhost','root','','Practise Database');
+
     $userEmail = $_POST["email"];
 
-    $sql = "DELETE FROM pwdReset WHERE pwdResetEmail=?";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
-        echo "There was an error";
+    $sql = "DELETE FROM pwdReset WHERE pwdResetEmail = ?; ";
+    
+    
+    $stmt = mysqli_prepare($conn, $sql);
+    if( false === $stmt){
+        echo 'ERROR';
         exit();
     }
     else {
-        mysqli_stmt_bind_param($stmt, "s", $userEmail);
-        mysqli_stmt_execute($stmt);
+        echo 'goinggg!';
     }
 
-    $sql = "INSERT INTO pwdReset (pwdResetEmail, pwdResetSelector, pwdResetToken) VALUES (?, ?, ?, ?);";
-    $stmt = mysqli_stmt_init($conn);
-    if (!mysqli_stmt_prepare($stmt, $sql)) {
+    
+    mysqli_stmt_bind_param($stmt, "s", $userEmail);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    
+    
+    $sql2 = "INSERT INTO pwdReset ( pwdResetEmail, pwdResetSelector, pwdResetToken, pwdResetExpires) VALUES (?, ?, ?, ?);";
+    $stmt2 = mysqli_prepare($conn, $sql2);
+
+    echo 'GOING X2';
+
+    if ( false === $stmt2) {
         echo "There was an error";
         exit();
     }
     else {
         $hashed_token = password_hash($token, PASSWORD_DEFAULT);
-        mysqli_stmt_bind_param($stmt, "ssss", $userEmail, $selector, $hashed_token, $expires);
-        mysqli_stmt_execute($stmt);
+        echo $hashed_token;
+        mysqli_stmt_bind_param($stmt2, "ssss", $userEmail, $selector, $hashed_token, $expires);
+        mysqli_stmt_execute($stmt2);
     }
-    mysqli_stmt_close($stmt);
-    mysqli_close($mysqli);
-    echo "him";
+    // echo 'Going before 44444';
+    // mysqli_stmt_close($stmt);
+    mysqli_stmt_close($stmt2);
+    mysqli_close($conn);
 
     $to = $userEmail;
     $subject = 'Reset your password for Elvoo app';
@@ -55,4 +72,3 @@ else {
 };
 
 
-?>
