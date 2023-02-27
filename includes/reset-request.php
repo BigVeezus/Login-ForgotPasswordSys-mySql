@@ -1,7 +1,17 @@
 <?php
 
+    ini_set("display_errors", 1); 		error_reporting(E_ALL); 
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\SMTP;
+    use PHPMailer\PHPMailer\Exception;
 
- @include 'config.php';
+    require '../phpmailer/src/Exception.php';
+    require '../phpmailer/src/PHPMailer.php';
+    require '../phpmailer/src/SMTP.php';
+
+
+
+    @include 'config.php';
 
 if (isset($_POST["reset-request-submit"])) {
     
@@ -46,7 +56,7 @@ if (isset($_POST["reset-request-submit"])) {
     }
     else {
         $hashed_token = password_hash($token, PASSWORD_DEFAULT);
-        echo $hashed_token;
+        // echo $hashed_token;
         mysqli_stmt_bind_param($stmt2, "ssss", $userEmail, $selector, $hashed_token, $expires);
         mysqli_stmt_execute($stmt2);
     }
@@ -54,17 +64,36 @@ if (isset($_POST["reset-request-submit"])) {
     // mysqli_stmt_close($stmt);
     mysqli_stmt_close($stmt2);
     mysqli_close($conn);
+    
+    echo 'bread';
+    
+    $mail = new PHPMailer(true);
 
-    $to = $userEmail;
-    $subject = 'Reset your password for Elvoo app';
+    echo 'beginning mail!';
+    $mail ->isSMTP();
+    $mail ->Host = 'smtp.gmail.com';
+    $mail ->SMTPAuth = true;
+    $mail ->Username = 'elvis.osujic@gmail.com';
+    $mail ->Password = 'kflafvycctjhyoom'; 
+    $mail ->SMTPSecure = 'ssl';
+    $mail ->Port = 465;
+    $mail ->setFrom('elvis.osujic@gmail.com');
+
+    $mail ->addAddress($userEmail);
+    $mail ->isHTML(true);
+
+    
+    $mail -> Subject = 'Reset your password for Elvoo app';
     $message = "<p>This is your password link</p>";
     $message .= '<a href="' . $url . '">' . $url . '</a></p>';
-
+    $mail -> Body = $message;
     $headers = "From: Elvoo <elvis.osujic@gmail.com>\r\n";
     $headers = "Reply-To: elvis.osujic@gmail.com\r\n";
     $headers = "Content-type: text/html\r\n";
 
     mail($to, $subject, $message, $headers);
+    $mail->send();
+
     header("location:../reset_password.php?reset=success");
 }
 else {

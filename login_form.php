@@ -61,8 +61,12 @@ if(isset($_POST['submit'])){
       if(isset($error)){
          foreach($error as $error){
             echo '<span class="error-msg">'.$error.'</span>';
-         };
-      };
+         }
+      } else if (isset($_GET["newpwd"])){
+         if($_GET["newpwd"] == 'passwordupdated'){
+            echo '<span style="color:green; class="success">Your password has been reset</span>';
+         }
+      }
       ?>
       <input type="email" name="email" required placeholder="enter your email">
       <input type="password" name="password" required placeholder="enter your password">

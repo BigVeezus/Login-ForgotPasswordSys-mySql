@@ -133,3 +133,22 @@
    font-size: 20px;
    padding:10px;
 }
+
+ form .success{
+   margin:10px 0;
+   display: block;
+   /* background: rgb(41, 170, 12); */
+   color:#30b932 !important; 
+   border-radius: 5px;
+   font-size: 20px;
+   padding:10px;
+}
+#success {
+   color: rgb(31, 167, 31);
+}
+.mycss{
+	color: green;
+    border:1px solid #000;
+    background: #ccc;
+    padding: 10px;
+}

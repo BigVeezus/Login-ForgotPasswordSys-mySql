@@ -9,6 +9,7 @@ if(isset($_POST['submit'])){
    $pass = md5($_POST['password']);
    $cpass = md5($_POST['cpassword']);
    $role = $_POST['role'];
+   
 
    $select = " SELECT * FROM users WHERE email = '$email' && password = '$pass' ";
 

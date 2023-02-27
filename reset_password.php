@@ -19,7 +19,8 @@
             <?php
             if(isset($_GET["reset"])){
                 if ($_GET["reset"] == "success"){
-                    echo '<span class="signupsuccess">Check your e-mail.</span>';
+                    echo "<br>";
+                    echo '<span style="color:green;">Reset link sent, check your e-mail.</span>';
                 }
             }
         
