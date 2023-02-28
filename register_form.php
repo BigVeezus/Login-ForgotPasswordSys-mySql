@@ -61,7 +61,12 @@ if(isset($_POST['submit'])){
       }
       else if (isset($_GET["newpwd"])){
          if($_GET["newpwd"] == 'passwordupdated'){
-            echo '<p class="signupsuccess">Your password has been reset</p>';
+            echo '<p style="color:green;" class="signupsuccess">Your password has been reset</p>';
+         }
+      }
+      else if (isset($_GET["reset"])){
+         if($_GET["reset"] == 'failure'){
+            echo '<span style="color:red;">User not registered, Pls register.</span>';
          }
       }
       ?>

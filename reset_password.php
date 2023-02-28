@@ -21,6 +21,17 @@
                 if ($_GET["reset"] == "success"){
                     echo "<br>";
                     echo '<span style="color:green;">Reset link sent, check your e-mail.</span>';
+                } else {
+                    if($_GET["reset"] == "failure"){
+                        echo "<br>";
+                        echo '<span style="color:red;">User not registered.</span>';
+                    }
+                    else{
+                        if($_GET["reset"] == 'expired'){
+                            echo "<br>";
+                            echo '<span style="color:red;">Email link expired, Pls input email and resend.</span>';
+                        }
+                    }
                 }
             }
         

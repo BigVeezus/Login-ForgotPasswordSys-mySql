@@ -6,14 +6,14 @@ if (isset($_POST["reset-password-submit"])) {
     // echo $selector;
     $validator = $_POST["validator"];
     $password = $_POST["pwd"];
-    echo $password;
+    // echo $password;
     $passwordRepeat = $_POST["pwd-repeat"];
     // echo 'him';
     if (empty($password) || empty($passwordRepeat)) {
-        header("location: ../create-new-pass.php?newpwd=empty");
+        header("location: ../create-new-pass.php?newpwd=empty&selector=". $selector . "&validator=" . $validator);
         exit();
     } else if ( $password != $passwordRepeat){
-        header("location: ../create-new-pass.php?newpwd=pwdnotsame");
+        header("location: ../create-new-pass.php?newpwd=pwdnotsame&selector=". $selector . "&validator=". $validator);
         exit();
     }
     // echo 'him for the 2nd time';
@@ -46,6 +46,8 @@ if (isset($_POST["reset-password-submit"])) {
         if (!$row = mysqli_fetch_assoc($result)){
             echo "<br>";
             echo "Error here.";
+            header("location: ../reset_password.php?reset=expired");
+
             exit();
         } else {
             

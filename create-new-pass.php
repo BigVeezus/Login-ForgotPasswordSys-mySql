@@ -27,12 +27,24 @@
                 <form action="includes/reset-password-form.php" method="post">
                     <input type="hidden" name="selector" value="<?php echo $selector ?>" >
                     <input type="hidden" name="validator" value="<?php echo $validator ?>" >
-                    <input type="password" name="pwd" placeholder="enter new password"... >
-                    <input type="password" name="pwd-repeat" placeholder="repeat new password"... >
+                    <input type="password" name="pwd" required placeholder="enter new password"... >
+                    <input type="password" name="pwd-repeat" required placeholder="repeat new password"... >
                     <input type="submit" name="reset-password-submit" value="Reset Password" class="form-btn">
+                    <?php
+                        if (isset($_GET["newpwd"])){
+                            if($_GET["newpwd"] == 'empty'){
+                                echo '<span style="color:red;">Please input password into both fields</span>';
+                            }
+                            elseif($_GET["newpwd"] == 'pwdnotsame'){
+                                echo '<span style="color:red;">Password is not the same</span>';
+                            }
+                        };
+                    ?>
                 </form>
-
-                <?php
+                    <?php
+                    
+                    
+                    
             }
         };
     ?>

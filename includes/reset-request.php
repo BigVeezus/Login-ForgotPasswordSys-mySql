@@ -4,11 +4,17 @@
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\SMTP;
     use PHPMailer\PHPMailer\Exception;
+    
 
     require '../phpmailer/src/Exception.php';
     require '../phpmailer/src/PHPMailer.php';
     require '../phpmailer/src/SMTP.php';
+    require '../vendor/autoload.php';
 
+
+    $envpath = '../';
+    $dotenv = Dotenv\Dotenv::createUnsafeImmutable("../");
+    $dotenv->load();
 
 
     @include 'config.php';
@@ -26,6 +32,30 @@ if (isset($_POST["reset-request-submit"])) {
     $conn = mysqli_connect('localhost','root','','Practise Database');
 
     $userEmail = $_POST["email"];
+
+    $sql = "SELECT * FROM users WHERE email = ?;";
+
+    $stmt = mysqli_prepare($conn, $sql);
+    if( false === $stmt){
+        echo 'mysqli prepare ERROR';
+        exit();
+    }
+    else {
+        echo "on to the next";
+    }
+    mysqli_stmt_bind_param($stmt, "s", $userEmail);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+
+    if (!$row = mysqli_fetch_assoc($result)){
+        echo "USER IS NOT REGISTERED!";
+        header("location:../register_form.php?reset=failure");
+        exit();
+    } else {
+        echo 'Registered user';
+    }
+    
 
     $sql = "DELETE FROM pwdReset WHERE pwdResetEmail = ?; ";
     
@@ -65,7 +95,7 @@ if (isset($_POST["reset-request-submit"])) {
     mysqli_stmt_close($stmt2);
     mysqli_close($conn);
     
-    echo 'bread';
+    // echo 'bread';
     
     $mail = new PHPMailer(true);
 
@@ -74,7 +104,10 @@ if (isset($_POST["reset-request-submit"])) {
     $mail ->Host = 'smtp.gmail.com';
     $mail ->SMTPAuth = true;
     $mail ->Username = 'elvis.osujic@gmail.com';
-    $mail ->Password = 'kflafvycctjhyoom'; 
+
+    
+
+    $mail ->Password = $_ENV['GMAIL_STMP_PASS']; 
     $mail ->SMTPSecure = 'ssl';
     $mail ->Port = 465;
     $mail ->setFrom('elvis.osujic@gmail.com');
